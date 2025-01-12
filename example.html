@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Example</title>
+</head>
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+    #app {
+        display: flex;
+        flex-direction: column;
+    }
+    input {
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+    }
+    button {
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #e0e0e0;
+    }
+    pre {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        white-space: pre-wrap;
+        width: 100%;
+    }
+</style>
+<body>
+<div id="app">
+    <h1>Untis PHP API</h1>
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Username">
+    <label for="secret">Secret</label>
+    <input type="password" id="secret" placeholder="Secret">
+    <label for="school">School</label>
+    <input type="text" id="school" placeholder="School">
+
+    <label for="startTime">Start Time</label>
+    <input type="date" name="startTime" id="startTime">
+    <label for="endTime">End Time</label>
+    <input type="date" name="endTime" id="endTime">
+</div>
+
+<h2>Actions</h2>
+<button id="fetchMasterData">Fetch Master Data</button>
+<button id="fetchTimetable">Fetch Timetable</button>
+<button id="fetchHomeworks">Fetch Homeworks</button>
+<button id="fetchText">Fetch Text</button>
+
+<h2>Output</h2>
+<pre id="output"></pre>
+
+<script>
+    //set time
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('startTime').value = today.toISOString().split('T')[0];
+    document.getElementById('endTime').value = tomorrow.toISOString().split('T')[0];
+
+    async function fetchData(action) {
+        const username = document.getElementById('username').value;
+        const secret = document.getElementById('secret').value;
+        const school = document.getElementById('school').value;
+        const startTime = document.getElementById('startTime').value;
+        const endTime = document.getElementById('endTime').value;
+
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('secret', secret);
+        formData.append('school', school);
+        formData.append('startTime', startTime);
+        formData.append('endTime', endTime);
+
+        const response = await fetch('untisAPI.php?action=' + action, {
+            method: 'POST',
+            body: formData
+        });
+
+
+        const data = await response.json();
+        document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    }
+
+    document.getElementById('fetchMasterData').addEventListener('click', () => fetchData('fetchMasterData'));
+    document.getElementById('fetchTimetable').addEventListener('click', () => fetchData('fetchTimetable'));
+    document.getElementById('fetchHomeworks').addEventListener('click', () => fetchData('fetchHomeworks'));
+    document.getElementById('fetchText').addEventListener('click', () => fetchData('fetchText'));
+</script>
+
+</body>
+</html>
