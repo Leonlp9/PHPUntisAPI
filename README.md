@@ -11,8 +11,8 @@ This project provides a PHP API to interact with the WebUntis system. It allows 
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/untis-php-api.git
-    cd untis-php-api
+    git clone https://github.com/Leonlp9/PHPUntisAPI.git
+    cd PHPUntisAPI
     ```
 
 2. Ensure the `untisAPI.php` file is accessible from your web server.
